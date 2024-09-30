@@ -1,9 +1,10 @@
+require("dotenv").config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 require("dotenv").config();
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 const mongodb = require('mongodb');
 const multer = require('multer');
 app.set('view engine', 'ejs');
@@ -13,7 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://jaindevshrut:qhfcsmwOL5AiXAoQ@cluster0.7ou0r.mongodb.net/Cluster0?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect(process.env.mongoose)
     .then(() => {
         console.log('Mongoose Connected');
     }).catch(e => {

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Crawler Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/header.css">
+  </head>
+  <body>
+
+    <!-- Header -->
+    <header>
+      <nav class="navbar">
+        <input type="checkbox" id="chk1">
+        <a href="http://127.0.0.1:5500/">
+          <div class="logo">
+            <svg class="flicker-svg" viewBox="0 0 200 200">
+              <image href="/1.svg" x="0" y="0" height="200px" width="200px" class="flicker-image-1" />
+              <image href="/2.svg" x="0" y="0" height="200px" width="200px" class="flicker-image-2" />
+              <image href="/3.svg" x="0" y="0" height="200px" width="200px" class="flicker-image-3" />
+              <image href="/4.svg" x="0" y="0" height="200px" width="200px" class="flicker-image-4" />
+            </svg>
+          </div>
+        </a>
+
+        <ul>
+          <li>
+            <div class="search-box">
+              <input type="text" id="input-box" placeholder="Search any country/forest" autocomplete="off">
+              <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+              <div class="result-box"></div>
+            </div>
+          </li>
+          <li><a href="http://127.0.0.1:5500/">Home<span></span></a></li>
+          <li><a href="/Gallery/Gallery.html ">Gallery<span></span></a></li>
+          <li><a href="https://job-applicatoin.vercel.app">Careers<span></span></a></li>
+          <li><a href="/Quiz/index.html">Quiz<span></span></a></li>
+        </ul>
+        <div class="menu">
+          <label for="chk1">
+            <i class="fa fa-bars"></i>
+          </label>
+        </div>
+      </nav>
+      <div class="banner">
+        <div class="container">
+          <h1 class="banner-title">
+            <span>Crawlers.</span> Blog
+          </h1>
+          <p>Everything that you want to know about Forest</p>
+        </div>
+      </div>
+    </header>
+    <!-- End of Header -->
+    
+    <!-- Design Section -->
+    <section class="design" id="design">
+      <div class="container">
+        <div class="title">
+          <h2>Blogs of Woodland</h2>
+          <p>Recent Wood talks on the blog</p>
+        </div>
+        <div class="design-content">
+          <!-- Blog Item -->
+          <% blogList.forEach(blog => { %>
+            <div class="design-item">
+                <div class="design-img">
+                  <% if (blog.newImg && blog.newImg.data && blog.newImg.contentType) { %>
+                    <img src="data:<%= blog.newImg.contentType %>;base64,<%= blog.newImg.data.toString('base64') %>" alt="<%= blog.newImg.filename || 'Blog Image' %>">
+                  <% } else { %>
+                    <img src="/path/to/default-image.jpg" alt="Default Image">
+                  <% } %>
+                  <span><%= blog.msg %><br>~ <%= blog.author %></span>
+                </div>
+                <div class="design-title">
+                    <h5 style="color:white; font-weight:10"><%=blog.date%></h5>
+                  <a href="#"><%= blog.title %></a>
+                  <br>
+                  <button onclick="toggleContent(this)" class="read-more-btn">Read More</button>
+                </div>
+              </div>
+              
+          <% }) %>
+          <!-- End of Blog Item -->
+          
+          <!-- Add Blog Item -->
+          <div class="design-item">
+            <div class="add" onclick="toggleForm()">
+              <div class="plus">
+                <span>Add Your Blog</span>
+                <i class="fa-solid fa-plus"></i>
+              </div>
+            </div>
+          </div>
+          <!-- End of Add Blog Item -->
+
+          <!-- Popup Form -->
+          <div class="popup-form" id="popupForm">
+            <div class="form-content">
+              <span class="close-btn" onclick="toggleForm()">&times;</span>
+              <h2>Add Your Blog</h2>
+              <form id="applicationForm" method="post" action="/submit" enctype="multipart/form-data">
+                <label for="author">Author:</label>
+                <input type="text" id="author" name="author" maxlength="25" required>
+
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" maxlength="100" required>
+
+                <label for="msg">Content:</label>
+                <textarea id="msg" name="msg" maxlength="350" required></textarea>
+
+                <label for="image">Upload Image:</label>
+                <input type="file" name="bookPic" required>
+
+                <button type="submit">Submit</button>
+              </form>
+            </div>
+          </div>
+          <!-- End of Popup Form -->
+        </div>
+      </div>
+    </section>
+    <!-- End of Design Section -->
+
+    <!-- About Section -->
+    <section class="about" id="about">
+      <div class="container">
+        <div class="about-content">
+          <div>
+            <img src="/images/about-bg.jpg" alt="About Background">
+          </div>
+          <div class="about-text">
+            <div class="title">
+              <h2>Crawlers</h2>
+              <p>Get Lost in  forest and find yourself</p>
+            </div>
+            <p>Presenting Crawlers<br>
+              A magnificent platform to visit the forests of the world. In a world, where forests are diminishing, here is a platform to develop love for all greenery, plant trees, and throw light on the beauty of forests.
+            </p>
+            <p>Our website is dedicated to raising awareness about upcoming forest conservation efforts and providing information about forests and their wildlife. We also offer a platform for community members to join, share their stories, and contribute to blogs. Additionally, our site helps people find job opportunities in the forest sector and apply for positions, making it easier for them to find employment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End of About Section -->
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+          <div class="footer-row">
+              <div class="footer-col">
+                  <h4>Company</h4>
+                  <ul>
+                      <li><a href="#">about us</a></li>
+                      <li><a href="#">our services</a></li>
+                      <li><a href="#">privacy policy</a></li>
+                      <li><a href="#">affiliate program</a></li>
+                  </ul>
+              </div>
+              <div class="footer-col">
+                  <h4>Support</h4>
+                  <ul>
+                      <li><a href="#">FAQ</a></li>
+                      <li><a href="#">World Map</a></li>
+                      <li><a href="https://plantree-server.vercel.app">Plant Tree</a></li>
+                      <li><a href="/Carrers/carrers.html">Join Community</a></li>
+                  </ul>
+              </div>
+              <div class="footer-col">
+                  <h4>Top Forest</h4>
+                  <ul>
+                      <li><a href="/Country/Brazil Forest/forest/Amazon forests.html">Amazon Rainforest</a></li>
+                      <li><a href="/Country/Russia Forest/Forest/Taiga-Boreal.html">Taiga-Boreal forest</a></li>
+                      <li><a href="/Country/Australia forest/Forests/Daintree.html">Daintree Rainforest</a></li>
+                      <li><a href="/Country/USA forest/Forest/Tongass_Nationalpark.html">Tongass National Forest</a></li>
+                  </ul>
+              </div>
+              <div class="footer-col">
+                  <h4>Contact Us</h4>
+                  <div class="social-links">
+                      <a href="mailto:crawlers175@gmail.com" class="email-icon">
+                          <i class="fa-solid fa-envelope"></i>
+                          <span class="email-address">crawlers175@gmail.com</span>
+                      </a>
+                      <a href="#" class="phone-icon">
+                          <i class="fa-solid fa-phone"></i>
+                          <span class="phone-number">+91 99780 06612</span>
+                      </a>
+                      <a href="https://github.com/Archit-175/Crawlers"><i class="fa-brands fa-github"></i></a>
+                      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </footer>
+    <!-- End of Footer -->
+
+    <!-- Scripts -->
+    <script>
+      function toggleContent(button) {
+        const spanElement = button.closest('.design-item').querySelector('.design-img span');
+        
+        if (spanElement.classList.contains('visible')) {
+          spanElement.classList.remove('visible');
+          button.textContent = 'Read More';
+          setTimeout(() => {
+            spanElement.style.zIndex = '-1';
+          }, 500);
+        } else {
+          spanElement.style.zIndex = '1';
+          spanElement.classList.add('visible');
+          button.textContent = 'Close';
+        }
+      }
+
+      function toggleForm() {
+        const popupForm = document.getElementById('popupForm');
+        popupForm.style.display = (popupForm.style.display === 'block') ? 'none' : 'block';
+      }
+    </script>
+  </body>
+</html>

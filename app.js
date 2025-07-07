@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require('express');
 const path = require('path');
+const axios = require("axios");
 const mongoose = require('mongoose');
 require("dotenv").config();
 const app = express();
@@ -60,17 +61,37 @@ app.get('/submit', (req, res) => {
 // Handle form submissions
 app.post("/submit", upload.single('bookPic'), async (req, res) => {
     const date = new Date();
-
-const day = String(date.getDate()).padStart(2, '0');
-const month = String(date.getMonth() + 1).padStart(2, '0'); 
-const year = String(date.getFullYear()).slice(-2);
-
-
-const formattedDate = `${day}-${month}-${year}`;
-
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); 
+    const year = String(date.getFullYear()).slice(-2);
+    const formattedDate = `${day}-${month}-${year}`;
 
     try {
-        const { author, title, msg } = req.body;
+        const { author, title, msg, 'g-recaptcha-response': token } = req.body;
+
+        // ✅ Verify reCAPTCHA token with Google
+        if (!token) {
+            return res.status(400).send("reCAPTCHA token missing");
+        }
+
+        const secretKey = process.env.RECAPTCHA_SECRET; // Store in .env
+        const verifyURL = `https://www.google.com/recaptcha/api/siteverify`;
+
+        const response = await axios.post(verifyURL, null, {
+            params: {
+                secret: secretKey,
+                response: token
+            }
+        });
+
+        const data = response.data;
+
+        if (!data.success) {
+            console.log("reCAPTCHA failed:", data);
+            return res.status(403).send("Failed reCAPTCHA verification");
+        }
+
+        // ✅ Continue saving blog
         if (!author || !msg) {
             console.log("Empty fields detected");
             return res.status(400).render('index', { error: "Please fill in all fields" });
@@ -84,12 +105,13 @@ const formattedDate = `${day}-${month}-${year}`;
                 data: req.file.buffer
             };
         }
+
         const newData = new Blogs({
-            author: author,
+            author,
             title,
             date: formattedDate,
             newImg: fileDocument,
-            msg: msg
+            msg
         });
 
         await newData.save();
@@ -100,6 +122,7 @@ const formattedDate = `${day}-${month}-${year}`;
         res.status(500).render('index', { error: "Error saving blog" });
     }
 });
+
 
 
 app.listen(port, () => {
